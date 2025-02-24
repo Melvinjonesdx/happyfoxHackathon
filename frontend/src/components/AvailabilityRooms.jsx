@@ -184,27 +184,16 @@ const AvailabilityRooms = () => {
 };
 
 const RoomCard = ({ roomNumber, status, eventName, eventDescription }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   return (
     <div className={styles.roomCard}>
-      <div className={styles.roomNumber}>#{roomNumber}</div>
+      <div className={styles.roomNumber}>Room #{roomNumber}</div>
       <div className={`${styles.status} ${status === 'available' ? styles.available : styles.inUse}`}>
-        {status === 'available' ? 'AVAILABLE' : 'IN USE'}
-        {status === 'inUse' && (
-          <button onClick={toggleDropdown} className={styles.eventBadge}>
-            View Event Details
-          </button>
-        )}
+        {status === 'available' ? 'Available' : 'In Use'}
       </div>
-      {isDropdownOpen && (
-        <div className={styles.eventDropdown}>
-          <p><strong>Event Name:</strong> {eventName}</p>
-          <p><strong>Description:</strong> {eventDescription}</p>
+      {status === 'inUse' && (
+        <div className={styles.eventDetails}>
+          <div className={styles.eventName}>{eventName}</div>
+          <div className={styles.eventDescription}>{eventDescription}</div>
         </div>
       )}
     </div>
