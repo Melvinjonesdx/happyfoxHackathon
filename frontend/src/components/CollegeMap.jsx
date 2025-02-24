@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { MapContainer, Marker, Popup, Polyline, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import './CollegeMap.css';
 
 // Custom Building Icon (Use a real building icon)
 const buildingIcon = L.icon({
@@ -13,6 +14,8 @@ const buildingIcon = L.icon({
 
 const CollegeMap = () => {
   const userPosition = [12.9720, 77.5945]; // Static user position
+  const [selectedBuilding, setSelectedBuilding] = useState(null); // State for selected building
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
   // Static building locations
   const buildings = [
@@ -31,9 +34,27 @@ const CollegeMap = () => {
     { id: 5, path: [[12.9690, 77.5945], [12.9680, 77.5960], [12.9700, 77.5975], [12.9720, 77.5980]] }, // Cafeteria → Gym (Route 2)
   ];
 
+  const handleBuildingClick = (building) => {
+    setSelectedBuilding(building); // Set the selected building
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value); // Update search term
+  };
+
+  const filteredBuildings = buildings.filter(building =>
+    building.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="w-full h-screen">
-      <h1 className="text-center text-2xl font-bold mb-4">College Map</h1>
+      <input 
+        type="text" 
+        placeholder="Search for a building..." 
+        className="search-bar" // Apply the CSS class
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
       <MapContainer center={userPosition} zoom={16} style={{ height: "100vh", width: "100%" }}>
         {/* Remove the TileLayer for background map */}
         {/* <TileLayer
@@ -43,7 +64,7 @@ const CollegeMap = () => {
         
         {/* Buildings Markers with Custom Icons */}
         {buildings.map((building) => (
-          <Marker key={building.id} position={building.coords} icon={buildingIcon}>
+          <Marker key={building.id} position={building.coords} icon={buildingIcon} onClick={() => handleBuildingClick(building)}>
             <Popup>{building.name}</Popup>
           </Marker>
         ))}
@@ -56,6 +77,7 @@ const CollegeMap = () => {
             color="blue" 
             weight={6} 
             dashArray="10, 5" 
+            style={{ display: selectedBuilding && selectedBuilding.id === route.id ? 'block' : 'none' }} // Highlight selected route
           />
         ))}
       </MapContainer>
