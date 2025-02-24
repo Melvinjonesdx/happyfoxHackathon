@@ -9,7 +9,7 @@ const CORS_ALLOWED_ORIGINS = [
 
 // Update CORS middleware to use the allowed origins
 app.use(cors({
-    origin: '*'
+    origin: CORS_ALLOWED_ORIGINS
 }));
 
 app.get("/api/college-map", async (req, res) => {

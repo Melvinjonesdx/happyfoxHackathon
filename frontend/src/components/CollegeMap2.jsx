@@ -28,7 +28,7 @@ const CollegeMap = () => {
 
   useEffect(() => {
     // Fetch buildings & roads data
-    fetch("http://localhost:5000/api/college-map") // Replace localhost with your laptop IP
+    fetch(" https://2089-152-58-223-173.ngrok-free.app/api/college-map") // Replace localhost with your laptop IP
     .then((res) => res.json())
       .then((data) => setMapData(data));
 
@@ -42,14 +42,11 @@ const CollegeMap = () => {
           setUserLocation([position.coords.latitude, position.coords.longitude]);
           setPosition([position.coords.latitude, position.coords.longitude]);
         },
-        (error) => {
-          console.error("Error getting location:", error);
-          // Consider handling specific error codes for better user feedback
-        },
+        (error) => console.error(error),
         {
-          enableHighAccuracy: true, // Forces GPS usage
-          timeout: 20000, // Wait 20s for best location
-          maximumAge: 0, // No cached location
+          enableHighAccuracy: true, // Ensures GPS is used when available
+          timeout: 10000, // Wait up to 10 seconds
+          maximumAge: 0, // Prevents cached location data
         }
       );
     } else {
