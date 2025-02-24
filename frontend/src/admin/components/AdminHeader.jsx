@@ -33,7 +33,7 @@ const AdminHeader = () => {
   const defaultLongitude = 0;
 
   useEffect(() => {
-    fetch("https://b337-115-245-95-250.ngrok-free.app/api/college-map")
+    fetch("http://localhost:5000/api/college-map")
       .then((res) => res.json())
       .then((data) => setMapData(data));
 
@@ -94,7 +94,7 @@ const AdminHeader = () => {
       }
 
       // Send the latest locationHistory to the backend
-      fetch("https://b337-115-245-95-250.ngrok-free.app/api/send-location", {
+      fetch("http://localhost:5000/api/send-location", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ locations: prevHistory }),
@@ -127,7 +127,7 @@ const AdminHeader = () => {
       ntype: "center",
     };
 
-    fetch("https://b337-115-245-95-250.ngrok-free.app/api/add-centre", {
+    fetch("http://localhost:5000/api/add-centre", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(centreData),
@@ -158,7 +158,7 @@ const AdminHeader = () => {
       ntype: "entrance",
     };
 
-    fetch("https://b337-115-245-95-250.ngrok-free.app/api/add-entrance", {
+    fetch("http://localhost:5000/api/add-entrance", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(entranceData),
