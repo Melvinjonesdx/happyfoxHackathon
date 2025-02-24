@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './AdminHeader.module.css';
 import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
@@ -95,39 +96,14 @@ const AdminHeader = () => {
   };
 
   return (
-    <div>
-      {/* Buttons for Start, Stop & Send */}
-      <div className={styles.controls}>
-        <button onClick={startTracking} disabled={tracking} className={styles.startBtn}>Start</button>
-        <button onClick={stopTracking} disabled={!tracking} className={styles.stopBtn}>Stop</button>
-        <button onClick={sendData} disabled={!isStopped} className={styles.sendBtn}>Send</button>
-      </div>
-
-      <MapContainer 
-        center={userLocation || [defaultLatitude, defaultLongitude]}
-        zoom={15}
-        style={{ height: "100vh", width: "100%" }}
-      >
-        <TileLayer url="" />
-
-        {/* Move map to user location smoothly */}
-        {userLocation && <MoveToUserLocation userLocation={userLocation} />}
-
-        {/* Show Buildings */}
-        {mapData?.buildings.map((building) => (
-          <Marker key={building.name} position={[building.lat, building.lng]}>
-            <Popup>{building.name}</Popup>
-          </Marker>
-        ))}
-
-        {/* Show User Location */}
-        {userLocation && (
-          <Marker position={userLocation} icon={userIcon}>
-            <Popup>You are here</Popup>
-          </Marker>
-        )}
-      </MapContainer>
-    </div>
+    <header className={styles.header}>
+      <div className={styles.logo}>Admin Panel</div>
+      <nav className={styles.nav}>
+        <a href="/admin/dashboard" className={styles.navLink}>Dashboard</a>
+        <a href="/admin/buildings" className={styles.navLink}>Buildings</a>
+        <a href="/admin/rooms" className={styles.navLink}>Rooms</a>
+      </nav>
+    </header>
   );
 };
 
