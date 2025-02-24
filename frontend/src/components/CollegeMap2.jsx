@@ -28,7 +28,7 @@ const CollegeMap = () => {
 
   useEffect(() => {
     // Fetch buildings & roads data
-    fetch(" https://2089-152-58-223-173.ngrok-free.app/api/college-map") // Replace localhost with your laptop IP
+    fetch("http://localhost:5000/api/college-map") // Replace localhost with your laptop IP
     .then((res) => res.json())
       .then((data) => setMapData(data));
 

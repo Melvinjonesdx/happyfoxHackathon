@@ -2,14 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-// Define allowed origins for CORS
-const CORS_ALLOWED_ORIGINS = [
-    "https://your-ngrok-url.ngrok-free.app",
-];
-
 // Update CORS middleware to use the allowed origins
 app.use(cors({
-    origin: CORS_ALLOWED_ORIGINS
+    origin: '*'
 }));
 
 app.get("/api/college-map", async (req, res) => {

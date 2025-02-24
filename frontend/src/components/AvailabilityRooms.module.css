@@ -1,244 +1,261 @@
 /* Modern Design System */
 .container {
-    min-height: 100vh;
-    background: #f8fafc;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-  }
-  
-  .header {
-    background: linear-gradient(135deg, #2d3748, #4a5568);
-    padding: 1.5rem 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .title {
-    color: white;
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin: 0;
-    letter-spacing: -0.5px;
-  }
-  
-  .controls {
-    padding: 1.5rem 2rem;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
-  
-  .filterGroup {
-    display: flex;
-    gap: 1rem;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .dropdown {
-    flex: 0.3;
-    padding: 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background: white;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5),
-              0 0 0 2px rgba(66, 153, 225, 0.5); /* Outline effect */
-  }
-  
-  .dropdown:focus {
-    outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-  }
-  
-  .searchInput {
-    flex: 0.5;
-    padding: 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5),
-              0 0 0 2px rgba(66, 153, 225, 0.5); /* Outline effect */
-  }
-  
-  .searchInput:focus {
-    outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-  }
-  
-  .searchButton {
-    flex: 0.2;
-    padding: 0.75rem;
-    background: #4299e1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .searchButton:hover {
-    background: #3182ce;
-  }
-  
-  .error {
-    color: #e53e3e;
-    padding: 1rem;
-    text-align: center;
-    margin-top: 1rem;
-    border-radius: 6px;
-    background: #fff5f5;
-  }
-  
-  .buildingsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  
-  .buildingCard {
-    position: relative;
-    overflow: hidden;
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5),
-              0 0 0 2px rgba(66, 153, 225, 0.5); /* Outline effect */
-    transition: all 0.2s ease;
-  }
-  
-  .buildingCard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .buildingName {
-    color: #2d3748;
-    font-size: 1.25rem;
-    margin: 0 0 0.5rem;
-  }
-  
-  .buildingDescription {
-    color: #718096;
-    font-size: 0.9rem;
-    margin: 0 0 1rem;
-    line-height: 1.4;
-  }
-  
-  .statusIndicator {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .roomsCount {
-    color: #4299e1;
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-  
-  /* Modal Styles */
-  .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    background: white;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow: hidden;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .modalHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    background: #f7fafc;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  
-  .modalTitle {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #2d3748;
-  }
-  
-  .closeButton {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #718096;
-    cursor: pointer;
-    padding: 0.5rem;
-    line-height: 1;
-  }
-  
-  .closeButton:hover {
-    color: #2d3748;
-  }
-  
-  .roomsList {
-    padding: 1.5rem;
-    display: grid;
-    gap: 1rem;
-  }
-  
-  .roomCard {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .roomNumber {
-    font-weight: 600;
-    color: #2d3748;
-  }
-  
-  .status {
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-  
-  .available {
-    background: #c6f6d5;
-    color: #22543d;
-  }
-  
-  .inUse {
-    background: #fed7d7;
-    color: #742a2a;
-  }
-  
-  .eventBadge {
-    background: #ebf8ff;
-    color: #2b6cb0;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-  }
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f0f4f8, #ffffff);
+  font-family: 'Inter', system-ui, sans-serif;
+  padding-bottom: 2rem;
+}
+
+.header {
+  background: linear-gradient(135deg, #2d3748, #4a5568);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.controls {
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.filterGroup {
+  display: flex;
+  gap: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.dropdown, .searchInput {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.dropdown:hover, .searchInput:hover {
+  background: white;
+  border-color: #cbd5e0;
+}
+
+.dropdown:focus, .searchInput:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.searchButton {
+  flex: 0.2;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #4299e1, #3182ce);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(66, 153, 225, 0.2);
+}
+
+.searchButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+}
+
+.error {
+  color: #e53e3e;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  border-radius: 6px;
+  background: #fff5f5;
+}
+
+.buildingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.buildingCard {
+  background: white;
+  border-radius: 16px;
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.buildingCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #4299e1, #3182ce);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.buildingCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e0;
+}
+
+.buildingCard:hover::before {
+  opacity: 1;
+}
+
+.buildingName {
+  color: #1a202c;
+  font-size: 1.375rem;
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+}
+
+.buildingDescription {
+  color: #4a5568;
+  font-size: 0.95rem;
+  margin: 0 0 1.25rem;
+  line-height: 1.5;
+}
+
+.roomsCount {
+  color: #4299e1;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  background: #ebf8ff;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f7fafc, #ffffff);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #718096;
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: #2d3748;
+}
+
+.roomsList {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.roomCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.roomCard:hover {
+  transform: translateX(4px);
+  background: white;
+}
+
+.roomNumber {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.available {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.inUse {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.eventBadge {
+  background: linear-gradient(135deg, #ebf8ff, #ffffff);
+  color: #2b6cb0;
+  padding: 0.375rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #bee3f8;
+}
