@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, Polyline, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet"; // Import Leaflet for custom icon
+import L from "leaflet";
 
 const userIcon = L.icon({
   iconUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg",
   iconSize: [20, 20],
 });
 
-// Component to move the map to the user's location
+// Component to move the map to the user's location smoothly
 const MoveToUserLocation = ({ userLocation }) => {
   const map = useMap();
   useEffect(() => {
     if (userLocation) {
-      map.setView(userLocation, 18); // Zoom in on user
+      map.flyTo(userLocation, 18, { animate: true, duration: 1.5 }); // Smooth movement
     }
   }, [userLocation, map]);
   return null;
@@ -32,23 +32,25 @@ const CollegeMap = () => {
     .then((res) => res.json())
       .then((data) => setMapData(data));
 
-    // Get User's Current Location
+    // Watch User's Current Location
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
-          console.log("Latitude:", position.coords.latitude);
-          console.log("Longitude:", position.coords.longitude);
-          console.log("Accuracy:", position.coords.accuracy, "meters");
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
-          setPosition([position.coords.latitude, position.coords.longitude]);
+          console.log(`Updated Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+          const newLocation = [position.coords.latitude, position.coords.longitude];
+          setUserLocation(newLocation);
+          setPosition(newLocation);
         },
-        (error) => console.error(error),
+        (error) => console.error("Error getting location:", error.message),
         {
-          enableHighAccuracy: true, // Ensures GPS is used when available
-          timeout: 10000, // Wait up to 10 seconds
-          maximumAge: 0, // Prevents cached location data
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 0,
         }
       );
+
+      // Cleanup function to stop watching position
+      return () => navigator.geolocation.clearWatch(watchId);
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
@@ -62,7 +64,7 @@ const CollegeMap = () => {
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      {/* Move map to user location */}
+      {/* Move map to user location smoothly */}
       {userLocation && <MoveToUserLocation userLocation={userLocation} />}
 
       {/* Show Buildings */}

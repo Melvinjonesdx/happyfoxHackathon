@@ -11,11 +11,11 @@ app.get("/api/college-map", async (req, res) => {
     console.log("hii")
      data = {
         "buildings": [
-          { "name": "Library", "lat": 12.9750, "lng": 77.5940 },
-          { "name": "Cafeteria", "lat": 12.9690, "lng": 77.5945 }
+          { "name": "bb cort", "lat": 13.009327, "lng": 80.003903 },
+          { "name": "hostel", "lat": 13.007529, "lng": 80.003946}
         ],
         "roads": [
-          { "name": "Library to Auditorium", "path": [[12.9750, 77.5940], [12.9725, 77.5905]] }
+          { "name": "Library to Auditorium", "path": [[13.009307, 80.003904 ], [13.009244, 80.003908],[13.009186, 80.003910],[13.009004, 80.003904  ]] }
         ]
       }
        // Fetch from MongoDB
