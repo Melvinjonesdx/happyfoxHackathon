@@ -46,6 +46,17 @@ app.get("/api/college-map", async (req, res) => {
     console.log(req.body.locations); // Log the received data
     res.status(200).json({ message: "Location received" }); // Send a JSON response back
   });
+  app.post("/api/add-centre", function(req, res) {
+    console.log("api")
+    console.log(req.body); // Log the received data
+    res.status(200).json({ message: "Location received" }); // Send a JSON response back
+  });
+  app.post("/api/add-entrance", function(req, res) {
+    console.log("api")
+    console.log(req.body); // Log the received data
+    res.status(200).json({ message: "Location received" }); // Send a JSON response back
+  });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(5000, "0.0.0.0", () => {
