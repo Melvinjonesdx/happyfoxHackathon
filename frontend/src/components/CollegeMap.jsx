@@ -5,7 +5,7 @@ import L from "leaflet";
 
 // Custom Building Icon (Use a real building icon)
 const buildingIcon = L.icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Free building icon
+  iconUrl: process.env.PUBLIC_URL + "/image.png", // Updated building icon URL
   iconSize: [40, 40],
   iconAnchor: [20, 40],
   popupAnchor: [0, -40],
@@ -53,9 +53,9 @@ const CollegeMap = () => {
           <Polyline 
             key={route.id} 
             positions={route.path} 
-            color="blue" 
-            weight={6} 
-            dashArray="10, 5" 
+            color="#f0864a" // Dark brown color for road
+            weight={5} // Increased weight for visibility
+            // dashArray="10, 5" // Removed for solid line
           />
         ))}
       </MapContainer>
