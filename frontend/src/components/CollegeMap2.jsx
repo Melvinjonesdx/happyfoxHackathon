@@ -28,7 +28,7 @@ const CollegeMap = () => {
 
   useEffect(() => {
     // Fetch buildings & roads data
-    fetch("http://192.168.187.186:5000/api/college-map") // Replace localhost with your laptop IP
+    fetch("http://localhost:5000/api/college-map") // Replace localhost with your laptop IP
     .then((res) => res.json())
       .then((data) => setMapData(data));
 
