@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-
+app.use(express.json());
 // Update CORS middleware to use the allowed origins
 app.use(cors({
     origin: '*'
 }));
 
 app.get("/api/college-map", async (req, res) => {
-    console.log("hii")
+
      data = {
         "buildings": [
           { "name": "bb cort", "lat": 13.009327, "lng": 80.003903 },
@@ -41,10 +41,16 @@ app.get("/api/college-map", async (req, res) => {
     res.json(data);
   });
   
+  app.post("/api/send-location", function(req, res) {
+    console.log("api")
+    console.log(req.body.locations); // Log the received data
+    res.status(200).json({ message: "Location received" }); // Send a JSON response back
+  });
 
 const PORT = process.env.PORT || 5000;
 app.listen(5000, "0.0.0.0", () => {
     console.log("Server running on port 5000");
   });
   
-  
+
+
