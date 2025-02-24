@@ -19,7 +19,7 @@ const MoveToUserLocation = ({ userLocation }) => {
   return null;
 };
 
-const AdminHeader = () => {
+const AdminDashboard = () => {
   const [mapData, setMapData] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [tracking, setTracking] = useState(false);
@@ -33,7 +33,7 @@ const AdminHeader = () => {
   const defaultLongitude = 0;
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/college-map")
+    fetch("https://9be8-115-245-95-250.ngrok-free.app/api/college-map")
       .then((res) => res.json())
       .then((data) => setMapData(data));
 
@@ -53,7 +53,7 @@ const AdminHeader = () => {
     }
   }, []);
 
-  // Start tracking user location every 2 seconds & update route
+  // Start tracking user location every 4 seconds & update route
   const startTracking = () => {
     setTracking(true);
     setIsStopped(false);
@@ -62,14 +62,13 @@ const AdminHeader = () => {
       navigator.geolocation.getCurrentPosition((position) => {
         const newLocation = [position.coords.latitude, position.coords.longitude];
 
-        // Update locationHistory only if the new location is different
         setLocationHistory((prev) => {
-          const lastLocation = prev[prev.length - 1];
-          if (!lastLocation || (lastLocation[0] !== newLocation[0] || lastLocation[1] !== newLocation[1])) {
-            return [...prev, newLocation]; // Add only if different
+          if (prev.length === 0 || (prev[prev.length - 1][0] !== newLocation[0] || prev[prev.length - 1][1] !== newLocation[1])) {
+            return [...prev, newLocation]; // Only add if it's a new location
           }
-          return prev; // Ignore if same
+          return prev;
         });
+
         console.log("Tracking:", newLocation);
       });
     }, 4000);
@@ -79,35 +78,28 @@ const AdminHeader = () => {
   const stopTracking = () => {
     setTracking(false);
     setIsStopped(true);
-    if (trackingInterval.current) { // Ensure interval exists before clearing
-      clearInterval(trackingInterval.current);
-      trackingInterval.current = null; // Reset the interval reference
-    }
+    clearInterval(trackingInterval.current);
   };
 
   // Send location history to backend
   const sendData = () => {
-    setLocationHistory((prevHistory) => {
-      if (prevHistory.length === 0) {
-        alert("No location data to send.");
-        return prevHistory; // Return unchanged state if no data
-      }
+    if (locationHistory.length === 0) {
+      alert("No location data to send.");
+      return;
+    }
 
-      // Send the latest locationHistory to the backend
-      fetch("http://localhost:5000/api/send-location", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ locations: prevHistory }),
+    fetch("https://9be8-115-245-95-250.ngrok-free.app/api/send-location", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ locations: locationHistory }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Response:", data);
+        alert("Location data sent successfully!");
+        setLocationHistory([]); // Clear location history after sending
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Response:", data);
-          alert("Location data sent successfully!");
-        })
-        .catch((error) => console.error("Error sending data:", error));
-
-      return []; // Clear locationHistory after sending
-    });
+      .catch((error) => console.error("Error sending data:", error));
   };
 
   // Function to add a centre
@@ -127,7 +119,7 @@ const AdminHeader = () => {
       ntype: "center",
     };
 
-    fetch("http://localhost:5000/api/add-centre", {
+    fetch("https://9be8-115-245-95-250.ngrok-free.app/api/add-centre", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(centreData),
@@ -158,7 +150,7 @@ const AdminHeader = () => {
       ntype: "entrance",
     };
 
-    fetch("http://localhost:5000/api/add-entrance", {
+    fetch("https://9be8-115-245-95-250.ngrok-free.app/api/add-entrance", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(entranceData),
@@ -212,7 +204,7 @@ const AdminHeader = () => {
         {userLocation && <MoveToUserLocation userLocation={userLocation} />}
 
         {/* Show Buildings */}
-        {mapData?.buildings.map((building) => (
+        {mapData?.buildings?.map((building) => (
           <Marker key={building.name} position={[building.lat, building.lng]}>
             <Popup>{building.name}</Popup>
           </Marker>
@@ -234,4 +226,4 @@ const AdminHeader = () => {
   );
 };
 
-export default AdminHeader;
+export default AdminDashboard;
