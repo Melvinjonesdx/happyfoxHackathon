@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './AvailabilityRooms.module.css';
 
 const AvailabilityRooms = () => {
@@ -6,61 +6,87 @@ const AvailabilityRooms = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
   const [selectedBuilding, setSelectedBuilding] = useState(null);
-  
-  const buildings = [
-    { 
-      id: 1, 
-      name: 'Library', 
-      description: 'A place with a vast collection of books and resources.', 
-      rooms: [
-        { number: '101', status: 'available', event: 'None' }, 
-        { number: '102', status: 'in use', event: 'Study Group' }
-      ] 
-    },
-    { 
-      id: 2, 
-      name: 'Cafeteria', 
-      description: 'A dining area serving meals and snacks.', 
-      rooms: [
-        { number: '201', status: 'available', event: 'None' }, 
-        { number: '202', status: 'in use', event: 'Lunch' }
-      ] 
-    },
-    { 
-      id: 3, 
-      name: 'Gym', 
-      description: 'A facility for physical exercise and sports.', 
-      rooms: [
-        { number: '301', status: 'available', event: 'None' }, 
-        { number: '302', status: 'in use', event: 'Yoga Class' }
-      ] 
-    },
-    { 
-      id: 4, 
-      name: 'Auditorium', 
-      description: 'A large room for events and presentations.', 
-      rooms: [
-        { number: '401', status: 'in use', event: 'Conference' }
-      ] 
-    },
-    { 
-      id: 5, 
-      name: 'Science Block', 
-      description: 'A building dedicated to science classes and labs.', 
-      rooms: [
-        { number: '501', status: 'available', event: 'None' }
-      ] 
-    },
-  ];
+  const [buildings, setBuildings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSearch = () => {
+  // Fetch buildings and rooms data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/details/alldetails');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setBuildings(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/details/alldetails');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      setBuildings(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSearch = async () => {
     if (!selectedType) {
       setError('Please select either "Room" or "Building" before searching.');
       return;
     }
+    if (!searchTerm) {
+      setError('Please enter a search term.');
+      return;
+    }
+  
     setError('');
-    // Implement search logic here based on selectedType and searchTerm
-    console.log(`Searching for ${searchTerm} in ${selectedType}`);
+  
+    try {
+      let filteredBuildings = [];
+  
+      if (selectedType.toLowerCase() === 'building') {
+        // Filter buildings by name
+        filteredBuildings = buildings.filter(building =>
+          building.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      } else if (selectedType.toLowerCase() === 'room') {
+        // Filter buildings that have the searched room
+        filteredBuildings = buildings.filter(building =>
+          building.rooms.some(room =>
+            room.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
+      }
+  
+      if (filteredBuildings.length === 0) {
+        throw new Error(`No ${selectedType.toLowerCase()} found with the name "${searchTerm}"`);
+      }
+  
+      // Update the buildings state with the filtered results
+      setBuildings(filteredBuildings);
+    } catch (error) {
+      setError(error.message);
+      console.error('Search error:', error);
+    }
   };
 
   const handleBuildingClick = (building) => {
@@ -71,9 +97,16 @@ const AvailabilityRooms = () => {
     setSelectedBuilding(null);
   };
 
+  if (loading) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className={styles.error}>Error: {error}</div>;
+  }
+
   return (
     <div className={styles.container}>
-
       <div className={styles.controls}>
         <div className={styles.filterGroup}>
           <select
@@ -92,20 +125,27 @@ const AvailabilityRooms = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
           />
-          <button 
-            onClick={handleSearch}
-            className={styles.searchButton}
-          >
+          <button onClick={handleSearch} className={styles.searchButton}>
             Search
+          </button>
+          <button 
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedType('');
+              fetchData(); // Reset to show all buildings
+            }} 
+            className={styles.clearButton}
+          >
+            Clear Search
           </button>
         </div>
         {error && <div className={styles.error}>{error}</div>}
       </div>
 
       <div className={styles.buildingsGrid}>
-        {buildings.map(building => (
-          <div 
-            key={building.id} 
+        {buildings.map((building) => (
+          <div
+            key={building.id}
             className={styles.buildingCard}
             onClick={() => handleBuildingClick(building)}
           >
@@ -125,25 +165,23 @@ const AvailabilityRooms = () => {
           <div className={styles.modal}>
             <div className={styles.modalHeader}>
               <h2 className={styles.modalTitle}>{selectedBuilding.name} Rooms</h2>
-              <button 
-                onClick={closePopup}
-                className={styles.closeButton}
-              >
+              <button onClick={closePopup} className={styles.closeButton}>
                 &times;
               </button>
             </div>
             <div className={styles.roomsList}>
-              {selectedBuilding.rooms.map((room, index) => (
-                <div key={index} className={styles.roomCard}>
-                  <div className={styles.roomNumber}>#{room.number}</div>
-                  <div className={`${styles.status} ${room.status === 'in use' ? styles.inUse : styles.available}`}>
-                    {room.status.toUpperCase()}
+              {selectedBuilding.rooms.map((room) => (
+                <div key={room.id} className={styles.roomCard}>
+                  <div className={styles.roomNumber}>#{room.name}</div>
+                  <div className={`${styles.status} ${room.availability ? styles.available : styles.inUse}`}>
+                    {room.availability ? 'AVAILABLE' : 'IN USE'}
                   </div>
-                  <div className={styles.eventInfo}>
-                    {room.event !== 'None' && (
-                      <span className={styles.eventBadge}>{room.event}</span>
-                    )}
-                  </div>
+                  {!room.availability && (
+                    <div className={styles.eventInfo}>
+                      <div className={styles.eventName}>{room.event_name}</div>
+                      <div className={styles.eventDescription}>{room.event_description}</div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -153,4 +191,5 @@ const AvailabilityRooms = () => {
     </div>
   );
 };
-export default AvailabilityRooms; 
+
+export default AvailabilityRooms;

@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 // Initialize Sequelize (Database Connection)
-const sequelize = new Sequelize('happyfox', 'root', '0011', {
+const sequelize = new Sequelize('happyfox', 'root', 'Manickam@2005', {
   host: 'localhost',
   dialect: 'mysql',
   logging: false

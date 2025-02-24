@@ -259,3 +259,16 @@
   font-weight: 500;
   border: 1px solid #bee3f8;
 }
+
+.clearButton {
+  padding: 0.5rem 1rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.clearButton:hover {
+  background-color: #e0e0e0;
+}

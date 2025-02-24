@@ -12,8 +12,9 @@ router.post("/search", async (req, res) => {
     try {
         const { type, name } = req.body; // type can be 'room' or 'building'
         if (!type || !name) {
-            return res.status(400).json({ message: "Type and name are required." });
+            return res.status(400).json({ message: "building and roomname are required." });
         }
+        console.log(type)
 
         if (type === "room") {
             // Search for a room by name and include the building it belongs to
@@ -48,7 +49,7 @@ router.post("/search", async (req, res) => {
                     attributes: ["name", "event_name", "event_description", "availability"] // Include availability
                 }
             });
-
+            console.log(building)
             if (!building) {
                 return res.status(404).json({ message: "Building not found." });
             }
@@ -64,8 +65,37 @@ router.post("/search", async (req, res) => {
     }
 });
 
+router.get("/alldetails", async function(req, res) {
+    try {
+        // Fetch all buildings with their associated rooms
+        const buildings = await Building.findAll({
+            include: [{
+                model: Rooms,
+                as: 'Rooms' // This matches the association we defined
+            }]
+        });
 
+        // Format the response
+        const response = buildings.map(building => ({
+            id: building.id,
+            name: building.name,
+            description: building.description,
+            rooms: building.Rooms.map(room => ({
+                id: room.id,
+                name: room.name,
+                event_name: room.event_name,
+                event_description: room.event_description,
+                availability: room.availability
+            }))
+        }));
 
+        res.status(200).json(response);
+    } catch (error) {
+        console.error("Error fetching details:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+// ... existing code ...
 module.exports = router;
 
 
