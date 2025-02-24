@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-
-
 // Update CORS middleware to use the allowed origins
 app.use(cors({
     origin: '*'
