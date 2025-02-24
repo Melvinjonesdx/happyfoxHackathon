@@ -1,99 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, Marker, Popup, Polyline, useMap } from "react-leaflet";
+import React from "react";
+import { MapContainer, Marker, Popup, Polyline, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Use placeholder images for icons
-const buildingIcon = "https://via.placeholder.com/40/007bff/ffffff?text=B"; // Placeholder for buildings
-const greeneryIcon = "https://via.placeholder.com/30/28a745/ffffff?text=G"; // Placeholder for greenery
+// Custom Building Icon (Use a real building icon)
+const buildingIcon = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Free building icon
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+  popupAnchor: [0, -40],
+});
 
 const CollegeMap = () => {
-  const [buildings, setBuildings] = useState([]);
-  const [greenery, setGreenery] = useState([]);
-  const [highlightedRoute, setHighlightedRoute] = useState(null);
-  const userPosition = [12.9716, 77.5946]; // Static user position
+  const userPosition = [12.9720, 77.5945]; // Static user position
 
-  useEffect(() => {
-    // Generate custom building data
-    const generateBuildings = () => {
-      const customBuildings = [
-        { id: 1, name: "Library", coords: [12.9720, 77.5940] },
-        { id: 2, name: "Cafeteria", coords: [12.9730, 77.5950] },
-        { id: 3, name: "Gym", coords: [12.9740, 77.5960] },
-        { id: 4, name: "Auditorium", coords: [12.9750, 77.5970] },
-        { id: 5, name: "Green Park", coords: [12.9760, 77.5980] },
-        { id: 6, name: "Science Block", coords: [12.9770, 77.5990] },
-        { id: 7, name: "Arts Building", coords: [12.9780, 77.5900] },
-        { id: 8, name: "Sports Complex", coords: [12.9790, 77.5910] },
-      ];
-      setBuildings(customBuildings);
-    };
+  // Static building locations
+  const buildings = [
+    { id: 1, name: "Library", coords: [12.9750, 77.5940] },
+    { id: 2, name: "Cafeteria", coords: [12.9690, 77.5945] },
+    { id: 3, name: "Gym", coords: [12.9720, 77.5980] },
+    { id: 4, name: "Auditorium", coords: [12.9725, 77.5905] },
+  ];
 
-    // Generate custom greenery data
-    const generateGreenery = () => {
-      const customGreenery = [
-        { id: 1, name: "Botanical Garden", coords: [12.9765, 77.5945] },
-        { id: 2, name: "Flower Bed", coords: [12.9775, 77.5955] },
-      ];
-      setGreenery(customGreenery);
-    };
-
-    generateBuildings();
-    generateGreenery();
-  }, []);
-
-  const handleBuildingClick = (building) => {
-    // Create a path from the user position to the selected building's coordinates
-    const path = [userPosition, building.coords];
-    setHighlightedRoute(path);
-  };
-
-  // Custom hook to set map bounds
-  const SetMapBounds = () => {
-    const map = useMap();
-    const bounds = [userPosition, ...buildings.map(b => b.coords), ...greenery.map(g => g.coords)];
-    map.fitBounds(bounds);
-    return null;
-  };
+  // Static routes (paths between buildings)
+  const routes = [
+    { id: 1, path: [[12.9750, 77.5940], [12.9740, 77.5935], [12.9725, 77.5905]] }, // Library → Auditorium
+    { id: 2, path: [[12.9750, 77.5940], [12.9740, 77.5950], [12.9720, 77.5980]] }, // Library → Gym
+    { id: 3, path: [[12.9690, 77.5945], [12.9705, 77.5930], [12.9725, 77.5905]] }, // Cafeteria → Auditorium
+    { id: 4, path: [[12.9690, 77.5945], [12.9705, 77.5955], [12.9720, 77.5980]] }, // Cafeteria → Gym (Route 1)
+    { id: 5, path: [[12.9690, 77.5945], [12.9680, 77.5960], [12.9700, 77.5975], [12.9720, 77.5980]] }, // Cafeteria → Gym (Route 2)
+  ];
 
   return (
     <div className="w-full h-screen">
+      <h1 className="text-center text-2xl font-bold mb-4">College Map</h1>
       <MapContainer center={userPosition} zoom={16} style={{ height: "100vh", width: "100%" }}>
-        <SetMapBounds />
+        {/* Remove the TileLayer for background map */}
+        {/* <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        /> */}
         
-        {/* User Representation as a Marker */}
-        <Marker position={userPosition} icon={L.divIcon({
-          className: 'user-icon',
-          html: '<div style="background-color: blue; width: 30px; height: 30px; border-radius: 50%; position: relative;"><div style="width: 10px; height: 10px; background-color: blue; position: absolute; top: -5px; left: 10px; transform: rotate(45deg); border-radius: 50%;"></div></div>',
-          iconSize: [30, 30],
-        })} />
-
-        {/* Custom Map Area for Buildings */}
+        {/* Buildings Markers with Custom Icons */}
         {buildings.map((building) => (
-          <Marker key={building.id} position={building.coords} icon={L.icon({ iconUrl: buildingIcon, iconSize: [40, 40] })}>
-            <Popup>
-              <button onClick={() => handleBuildingClick(building)}>
-                {building.name}
-              </button>
-            </Popup>
+          <Marker key={building.id} position={building.coords} icon={buildingIcon}>
+            <Popup>{building.name}</Popup>
           </Marker>
         ))}
 
-        {/* Custom Map Area for Greenery */}
-        {greenery.map((green) => (
-          <Marker key={green.id} position={green.coords} icon={L.icon({ iconUrl: greeneryIcon, iconSize: [30, 30] })}>
-            <Popup>
-              <span>{green.name}</span>
-            </Popup>
-          </Marker>
-        ))}
-
-        {highlightedRoute && (
-          <Polyline
-            positions={highlightedRoute}
-            color="red"
+        {/* Display Routes as Roads */}
+        {routes.map((route) => (
+          <Polyline 
+            key={route.id} 
+            positions={route.path} 
+            color="blue" 
+            weight={6} 
+            dashArray="10, 5" 
           />
-        )}
+        ))}
       </MapContainer>
     </div>
   );
