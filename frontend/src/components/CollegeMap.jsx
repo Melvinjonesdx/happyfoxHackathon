@@ -12,8 +12,15 @@ const buildingIcon = L.icon({
   popupAnchor: [0, -40],
 });
 
+const userIcon = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149071.png", // User emoji
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+  popupAnchor: [0, -40],
+});
+
 const CollegeMap = () => {
-  const userPosition = [12.9720, 77.5945]; // Static user position
+  const userPosition = [12.9740, 77.5935]; // Static user position
   const [selectedBuilding, setSelectedBuilding] = useState(null); // State for selected building
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
@@ -46,6 +53,19 @@ const CollegeMap = () => {
     building.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Function to find the route from the user to the selected building
+  const getRouteToBuilding = (building) => {
+    const buildingCoords = building.coords;
+    return routes.find(route => 
+      route.path.some(point => 
+        point[0] === buildingCoords[0] && point[1] === buildingCoords[1]
+      ) && 
+      route.path.some(point => 
+        point[0] === userPosition[0] && point[1] === userPosition[1]
+      )
+    );
+  };
+
   return (
     <div className="w-full h-screen">
       <input 
@@ -56,11 +76,10 @@ const CollegeMap = () => {
         onChange={handleSearchChange}
       />
       <MapContainer center={userPosition} zoom={16} style={{ height: "100vh", width: "100%" }}>
-        {/* Remove the TileLayer for background map */}
-        {/* <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        /> */}
+        {/* User Marker */}
+        <Marker position={userPosition} icon={userIcon}>
+          <Popup>You are here</Popup>
+        </Marker>
         
         {/* Buildings Markers with Custom Icons */}
         {buildings.map((building) => (
@@ -79,6 +98,17 @@ const CollegeMap = () => {
             // dashArray="10, 5" // Removed for solid line
           />
         ))}
+
+        {/* Highlight the route from the user to the selected building */}
+        {selectedBuilding && (
+          <Polyline 
+            positions={getRouteToBuilding(selectedBuilding)?.path || []} 
+            color="green" // Highlight color
+            weight={6} 
+            dashArray="10, 5" 
+          />
+        )}
+
       </MapContainer>
     </div>
   );

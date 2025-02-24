@@ -20,12 +20,13 @@ const headerStyle = {
   alignItems: 'center',
   padding: '10px 20px',
   backgroundColor: '#007bff',
-  color: 'white',
+  background: 'linear-gradient(135deg, #2d3748, #4a5568)'
 };
 
 const brandStyle = {
   fontSize: '24px',
   fontWeight: 'bold',
+  color:'white'
 };
 
 const navStyle = {
