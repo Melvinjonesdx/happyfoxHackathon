@@ -156,7 +156,7 @@ const AvailabilityRooms = () => {
         </div>
       )}
 
-      {selectedBuilding && (
+{selectedBuilding && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <div className={styles.modalHeader}>
@@ -167,21 +167,44 @@ const AvailabilityRooms = () => {
             </div>
             <div className={styles.roomsList}>
               {selectedBuilding.rooms.map((room) => (
-                <div key={room.id} className={styles.roomCard}>
-                  <div className={styles.roomNumber}>#{room.name}</div>
-                  <div className={`${styles.status} ${room.availability ? styles.available : styles.inUse}`}>
-                    {room.availability ? 'AVAILABLE' : 'IN USE'}
-                  </div>
-                  {!room.availability && (
-                    <div className={styles.eventInfo}>
-                      <div className={styles.eventName}>{room.event_name}</div>
-                      <div className={styles.eventDescription}>{room.event_description}</div>
-                    </div>
-                  )}
-                </div>
+                <RoomCard
+                  key={room.id}
+                  roomNumber={room.name}
+                  status={room.availability ? 'available' : 'inUse'}
+                  eventName={room.event_name}
+                  eventDescription={room.event_description}
+                />
               ))}
             </div>
           </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const RoomCard = ({ roomNumber, status, eventName, eventDescription }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  return (
+    <div className={styles.roomCard}>
+      <div className={styles.roomNumber}>#{roomNumber}</div>
+      <div className={`${styles.status} ${status === 'available' ? styles.available : styles.inUse}`}>
+        {status === 'available' ? 'AVAILABLE' : 'IN USE'}
+        {status === 'inUse' && (
+          <button onClick={toggleDropdown} className={styles.eventBadge}>
+            View Event Details
+          </button>
+        )}
+      </div>
+      {isDropdownOpen && (
+        <div className={styles.eventDropdown}>
+          <p><strong>Event Name:</strong> {eventName}</p>
+          <p><strong>Description:</strong> {eventDescription}</p>
         </div>
       )}
     </div>
