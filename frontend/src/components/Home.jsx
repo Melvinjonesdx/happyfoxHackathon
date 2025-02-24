@@ -18,30 +18,27 @@ const Home = () => {
       <div className={styles.featuresContainer}>
         <h2 className={styles.featuresTitle}>Features</h2>
         <div className={styles.featuresGrid}>
-        <div className={styles.featureBox}>
-        <div className={styles.iconContainer}>
-          <img src="https://cdn-icons-png.flaticon.com/512/2991/2991231.png" alt="Room Availability" className={styles.icon} />
-        </div>
-        <h3>Room Availability</h3>
-        <p>Check the availability of rooms in real-time.</p>
-      </div>
-
-      <div className={styles.featureBox}>
-        <div className={styles.iconContainer}>
-          <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Campus Map" className={styles.icon} />
-        </div>
-        <h3>Campus Map</h3>
-        <p>Navigate through the campus with ease using our interactive map.</p>
-      </div>
-
-      <div className={styles.featureBox}>
-        <div className={styles.iconContainer}>
-          <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png" alt="Event Management" className={styles.icon} />
-        </div>
-        <h3>Event Management</h3>
-        <p>Stay updated with the latest events happening on campus.</p>
-      </div>
-
+          <div className={styles.featureBox}>
+            <div className={styles.iconContainer}>
+              <img src="https://cdn-icons-png.flaticon.com/512/2991/2991231.png" alt="Room Availability" className={styles.icon} />
+            </div>
+            <h3>Room Availability</h3>
+            <p>Check the availability of rooms in real-time.</p>
+          </div>
+          <div className={styles.featureBox}>
+            <div className={styles.iconContainer}>
+              <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Campus Map" className={styles.icon} />
+            </div>
+            <h3>Campus Map</h3>
+            <p>Navigate through the campus with ease using our interactive map.</p>
+          </div>
+          <div className={styles.featureBox}>
+            <div className={styles.iconContainer}>
+              <img src="https://cdn-icons-png.flaticon.com/512/1055/1055644.png" alt="Event Management" className={styles.icon} />
+            </div>
+            <h3>Event Management</h3>
+            <p>Stay updated with the latest events happening on campus.</p>
+          </div>
         </div>
       </div>
 
