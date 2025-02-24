@@ -25,8 +25,12 @@
   background: white;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   position: sticky;
-  top: 0;
+  top: 60px; /* Adjust to match the header height */
   z-index: 10;
+  border-radius: 12px; /* Add rounded corners */
+  border: 1px solid #e2e8f0; /* Add a subtle border */
+  margin: 1rem auto; /* Add margin for spacing */
+  max-width: 1200px; /* Limit the width for */
 }
 
 .filterGroup {
@@ -39,7 +43,7 @@
 .dropdown, .searchInput {
   flex: 1;
   padding: 0.875rem 1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #425c7e;
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.2s ease;
@@ -100,7 +104,7 @@
   padding: 1.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #425c7e;
   position: relative;
   overflow: hidden;
 }
@@ -215,12 +219,14 @@
 
 .roomCard {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the left */
   padding: 1.25rem;
   background: #f8fafc;
   border-radius: 12px;
   transition: all 0.2s ease;
+  margin-bottom: 1rem;
+  width: 100%; /* Ensure full width */
 }
 
 .roomCard:hover {
@@ -231,6 +237,7 @@
 .roomNumber {
   font-weight: 600;
   color: #2d3748;
+  margin-bottom: 0.5rem; 
 }
 
 .status {
@@ -238,16 +245,21 @@
   border-radius: 4px;
   font-size: 0.85rem;
   font-weight: 500;
+  margin-bottom: 0.5rem; 
 }
 
 .available {
   background: #c6f6d5;
   color: #22543d;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
 }
 
 .inUse {
   background: #fed7d7;
   color: #742a2a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
 }
 
 .eventBadge {
@@ -258,6 +270,28 @@
   font-size: 0.85rem;
   font-weight: 500;
   border: 1px solid #bee3f8;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.eventBadge:hover {
+  background: #bee3f8;
+}
+
+.eventDropdown {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure full width */
+}
+
+.eventDropdown p {
+  margin: 0.5rem 0;
+  color: #4a5568;
 }
 
 .clearButton {
