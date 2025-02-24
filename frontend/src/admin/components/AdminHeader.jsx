@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './AdminHeader.module.css';
 
 const AdminHeader = () => {
@@ -6,9 +7,9 @@ const AdminHeader = () => {
     <header className={styles.header}>
       <div className={styles.logo}>Admin Panel</div>
       <nav className={styles.nav}>
-        <a href="/admin/dashboard" className={styles.navLink}>Dashboard</a>
-        <a href="/admin/buildings" className={styles.navLink}>Buildings</a>
-        <a href="/admin/rooms" className={styles.navLink}>Rooms</a>
+        <Link to="/admin/dashboard" className={styles.navLink}>Dashboard</Link>
+        <Link to="/admin/buildings" className={styles.navLink}>Buildings</Link>
+        <Link to="/admin/rooms" className={styles.navLink}>Rooms</Link>
       </nav>
     </header>
   );
