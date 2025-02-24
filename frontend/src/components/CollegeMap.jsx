@@ -43,12 +43,10 @@ const CollegeMap = () => {
   }, []);
 
   const handleBuildingClick = (building) => {
-    // Create a path from the user position to the selected building's coordinates
     const path = [userPosition, building.coords];
     setHighlightedRoute(path);
   };
 
-  // Custom hook to set map bounds
   const SetMapBounds = () => {
     const map = useMap();
     const bounds = [userPosition, ...buildings.map(b => b.coords), ...greenery.map(g => g.coords)];
