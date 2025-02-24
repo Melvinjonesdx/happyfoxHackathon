@@ -57,12 +57,12 @@ const AvailabilityRooms = () => {
       setError('Please enter a search term.');
       return;
     }
-  
+
     setError('');
-  
+
     try {
       let filteredBuildings = [];
-  
+
       if (selectedType.toLowerCase() === 'building') {
         // Filter buildings by name
         filteredBuildings = buildings.filter(building =>
@@ -76,11 +76,11 @@ const AvailabilityRooms = () => {
           )
         );
       }
-  
+
       if (filteredBuildings.length === 0) {
         throw new Error(`No ${selectedType.toLowerCase()} found with the name "${searchTerm}"`);
       }
-  
+
       // Update the buildings state with the filtered results
       setBuildings(filteredBuildings);
     } catch (error) {
@@ -96,14 +96,6 @@ const AvailabilityRooms = () => {
   const closePopup = () => {
     setSelectedBuilding(null);
   };
-
-  if (loading) {
-    return <div className={styles.loading}>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>Error: {error}</div>;
-  }
 
   return (
     <div className={styles.container}>
@@ -142,23 +134,27 @@ const AvailabilityRooms = () => {
         {error && <div className={styles.error}>{error}</div>}
       </div>
 
-      <div className={styles.buildingsGrid}>
-        {buildings.map((building) => (
-          <div
-            key={building.id}
-            className={styles.buildingCard}
-            onClick={() => handleBuildingClick(building)}
-          >
-            <h3 className={styles.buildingName}>{building.name}</h3>
-            <p className={styles.buildingDescription}>{building.description}</p>
-            <div className={styles.statusIndicator}>
-              <span className={styles.roomsCount}>
-                {building.rooms.length} {building.rooms.length === 1 ? 'Room' : 'Rooms'}
-              </span>
+      {loading ? (
+        <div className={styles.loading}>Loading...</div>
+      ) : (
+        <div className={styles.buildingsGrid}>
+          {buildings.map((building) => (
+            <div
+              key={building.id}
+              className={styles.buildingCard}
+              onClick={() => handleBuildingClick(building)}
+            >
+              <h3 className={styles.buildingName}>{building.name}</h3>
+              <p className={styles.buildingDescription}>{building.description}</p>
+              <div className={styles.statusIndicator}>
+                <span className={styles.roomsCount}>
+                  {building.rooms.length} {building.rooms.length === 1 ? 'Room' : 'Rooms'}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {selectedBuilding && (
         <div className={styles.modalOverlay}>
