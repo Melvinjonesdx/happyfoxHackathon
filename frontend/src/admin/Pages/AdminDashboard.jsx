@@ -28,14 +28,16 @@ const AdminDashboard = () => {
   const [isStopped, setIsStopped] = useState(false);
   const [centreName, setCentreName] = useState(""); // New state for centre name
   const [entranceName, setEntranceName] = useState(""); // New state for entrance name
+  const socketRef = useRef(null); // Store WebSocket reference
 
   const defaultLatitude = 0;
   const defaultLongitude = 0;
 
   useEffect(() => {
-    fetch("https://9be8-115-245-95-250.ngrok-free.app/api/college-map")
-      .then((res) => res.json())
-      .then((data) => setMapData(data));
+    // Removed data fetching for college map
+    // fetch("https://9be8-115-245-95-250.ngrok-free.app/api/college-map")
+    //   .then((res) => res.json())
+    //   .then((data) => setMapData(data));
 
     if (navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
@@ -51,7 +53,29 @@ const AdminDashboard = () => {
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
-  }, []);
+
+    // Create a WebSocket connection to the backend
+    socketRef.current = new WebSocket("ws://localhost:8765/mapping/admin");
+
+    socketRef.current.onopen = () => {
+      console.log("WebSocket connection established");
+    };
+
+    socketRef.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+    };
+
+    socketRef.current.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close(); // Close WebSocket on component unmount
+      }
+    };
+  }, []); // Empty dependency array to run only on mount
 
   // Start tracking user location every 4 seconds & update route
   const startTracking = () => {
@@ -60,10 +84,10 @@ const AdminDashboard = () => {
 
     trackingInterval.current = setInterval(() => {
       navigator.geolocation.getCurrentPosition((position) => {
-        const newLocation = [position.coords.latitude, position.coords.longitude];
+        const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude }; // New structure
 
         setLocationHistory((prev) => {
-          if (prev.length === 0 || (prev[prev.length - 1][0] !== newLocation[0] || prev[prev.length - 1][1] !== newLocation[1])) {
+          if (prev.length === 0 || (prev[prev.length - 1].lat !== newLocation.lat || prev[prev.length - 1].lng !== newLocation.lng)) {
             return [...prev, newLocation]; // Only add if it's a new location
           }
           return prev;
@@ -88,6 +112,13 @@ const AdminDashboard = () => {
       return;
     }
 
+    // Send location history to WebSocket server
+    if (socketRef.current) {
+      socketRef.current.send(JSON.stringify({ locations: locationHistory })); // Send location history to the WebSocket server
+      console.log("Location history sent to WebSocket server:", locationHistory);
+    }
+
+    // Optionally, you can still send the data to the backend
     fetch("https://9be8-115-245-95-250.ngrok-free.app/api/send-location", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -164,6 +195,14 @@ const AdminDashboard = () => {
       .catch((error) => console.error("Error adding entrance:", error));
   };
 
+  const handleCloneClick = async () => {
+    if (socketRef.current) {
+      await socketRef.current.send("over");
+      socketRef.current.close();
+      console.log("WebSocket connection closed on clone button click");
+    }
+  };
+
   return (
     <div>
       {/* Buttons for Start, Stop, Send & Add Centre */}
@@ -191,6 +230,8 @@ const AdminDashboard = () => {
           className={styles.entranceInput} // Add your CSS class if needed
         />
         <button onClick={addEntrance} className={styles.addEntranceBtn}>Add Entrance</button>
+
+        <button onClick={handleCloneClick}>Clone</button>
       </div>
 
       <MapContainer
