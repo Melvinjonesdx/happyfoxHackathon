@@ -1,0 +1,15 @@
+/* CollegeMap.css */
+.search-bar {
+  position: fixed; /* Use fixed positioning to ensure it stays at the top */
+  top: 80px; /* Adjust this value based on your header height */
+  left: 50%;
+  transform: translateX(-50%); /* Center align */
+  width: 500px; /* Increased width for a larger search bar */
+  padding: 10px 15px; /* Padding for better appearance */
+  border: 1px solid #ccc;
+  border-radius: 25px; /* More pronounced curved corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  font-size: 16px;
+  background-color: white; /* Background color for better visibility */
+  z-index: 1000; /* Ensure it appears above the map */
+}
